@@ -6,7 +6,7 @@ import { Category } from 'src/categories/entities/category.entity';
 import { Connection, Repository } from 'typeorm';
 import { Result } from './entities/result.entity';
 import { Prediction } from 'src/predictions/entities/prediction.entity';
-import { query } from 'express';
+
 
 @Injectable()
 export class ResultsService {
@@ -67,8 +67,8 @@ export class ResultsService {
       .getRawOne();
 
     return {
-      championship_round_points: championshipRoundPoints,
-      total_points: totalPoints
+      roundPoints: championshipRoundPoints.total_points,
+      totalPoints: totalPoints.total_points
     }
   }
 
@@ -136,9 +136,9 @@ export class ResultsService {
     const leaderboard = await this.predictionsRepository
       .createQueryBuilder('predictions')
       .innerJoin('predictions.player', 'player')
-      .select('player.name, sum(points_scored) as total_points')
+      .select('player.name, sum(points_scored) as points')
       .groupBy('player_id')
-      .addOrderBy('total_points', 'DESC')
+      .addOrderBy('points', 'DESC')
       .getRawMany();
 
     return leaderboard;

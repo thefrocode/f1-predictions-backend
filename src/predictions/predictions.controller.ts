@@ -17,9 +17,12 @@ export class PredictionsController {
     return this.predictionsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.predictionsService.findOne(+id);
+  @Get(':round_id/:player_id')
+  findOne(
+    @Param('round_id') round_id: string,
+    @Param('player_id') player_id: string,
+  ) {
+    return this.predictionsService.findOne(+round_id, +player_id);
   }
 
   @Patch(':id')
